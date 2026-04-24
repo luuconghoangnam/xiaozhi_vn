@@ -12,7 +12,7 @@
   <a href="#-tính-năng-nổi-bật">Tính năng</a> •
   <a href="#-cài-đặt">Cài đặt</a> •
   <a href="#-cấu-hình">Cấu hình</a> •
-  <a href="#-mcp-tools">Công cụ</a> •
+  <a href="#-lấy-access-token">Lấy Token</a> •
   <a href="#-đóng-góp">Đóng góp</a>
 </p>
 
@@ -30,42 +30,44 @@
 - **VAD (Voice Activity Detection)**: Tự động phát hiện khi bạn bắt đầu và kết thúc câu nói.
 
 ### 👁️ Đa phương thức (Multimodal Vision)
-- **Nhận diện hình ảnh**: Coonie có thể nhìn qua Camera để mô tả đồ vật, đọc chữ hoặc phân tích tình huống thông qua các mô hình Vision (như GLM-4V).
-
-### 🛠️ Hệ sinh thái công cụ (MCP Tools)
-- **Điều khiển hệ thống**: Tăng giảm âm lượng, tắt máy, chụp màn hình.
-- **Giải trí**: Tìm kiếm và phát nhạc từ Youtube, quản lý thư viện nhạc local.
-- **Thông tin**: Xem thời tiết, tra cứu kiến thức, quản lý lịch trình cá nhân.
-
-### 🖥️ Giao diện hiện đại
-- Giao diện PyQt5 trực quan với các biểu cảm sinh động của trợ lý AI.
-- Chế độ chạy ngầm trong khay hệ thống (System Tray).
+- **Nhận diện hình ảnh**: Coonie có thể nhìn qua Camera để mô tả đồ vật, đọc chữ hoặc phân tích tình huống thông qua các mô hình Vision.
 
 ## 🚀 Cài đặt
 
-### Cách 1: Sử dụng Script tự động (Khuyên dùng)
+### Cách 1: Sử dụng Script tự động (Khuyên dùng - Tự động 100%)
 1. Tải dự án về máy:
    ```bash
-   git clone https://github.com/your-username/xiaozhi_vn.git
+   git clone https://github.com/luuconghoangnam/xiaozhi_vn.git
    cd xiaozhi_vn/py-xiaozhi
    ```
-2. **Windows**: Double-click vào file `install.bat`.
+2. **Windows**: Chạy file `install.bat`.
 3. **Linux/macOS**: Chạy lệnh `python3 install.py`.
 
-Script sẽ tự động tạo môi trường ảo, cài đặt thư viện và chuẩn bị file cấu hình.
+Script sẽ tự động tạo môi trường ảo, cài đặt thư viện và **tự động tải Models**.
 
-### Cách 2: Cài đặt thủ công
-1. Tạo môi trường ảo: `python -m venv .venv`
-2. Kích hoạt: `.venv\Scripts\activate` (Windows) hoặc `source .venv/bin/activate` (Mac/Linux).
-3. Cài đặt thư viện: `pip install -r requirements.txt`
+## 🔑 Lấy Access Token
+
+Để ứng dụng có thể kết nối với server AI, bạn cần có một Access Token:
+
+1. Truy cập vào trang quản lý: [https://xiaozhi.me/](https://xiaozhi.me/) (hoặc quét mã QR trên thiết bị nếu có).
+2. Đăng nhập vào tài khoản của bạn.
+3. Tìm đến mục **Thiết bị (Devices)** hoặc **Cài đặt (Settings)**.
+4. Sao chép đoạn mã **Access Token** (thường là một chuỗi ký tự dài).
 
 ## ⚙️ Cấu hình
 
-Sau khi cài đặt, bạn cần thực hiện các bước sau:
-1. Mở file `config/config.json`.
-2. Điền **WEBSOCKET_ACCESS_TOKEN** (Lấy từ hệ thống XiaoZhi).
-3. (Tùy chọn) Điền **VLapi_key** nếu bạn muốn sử dụng tính năng Camera.
-4. Kiểm tra thư mục `models/` đã có đủ các file: `encoder.onnx`, `decoder.onnx`, `joiner.onnx`, `tokens.txt`.
+Sau khi đã có Token, bạn thực hiện điền vào ứng dụng như sau:
+
+1. Tìm file `config/config.json` trong thư mục dự án.
+2. Mở file bằng Notepad hoặc VS Code.
+3. Tìm dòng `"WEBSOCKET_ACCESS_TOKEN": "..."` và dán Token của bạn vào giữa dấu ngoặc kép.
+   ```json
+   "NETWORK": {
+     "WEBSOCKET_ACCESS_TOKEN": "DÁN_TOKEN_CỦA_BẠN_VÀO_ĐÂY",
+     ...
+   }
+   ```
+4. Lưu file lại.
 
 ## 🏃 Chạy ứng dụng
 
@@ -81,12 +83,7 @@ python main.py
 - `assets/`: Hình ảnh, icon và tài nguyên giao diện.
 
 ## 🤝 Đóng góp
-Chúng tôi luôn hoan nghênh các đóng góp từ cộng đồng:
-1. Fork dự án.
-2. Tạo nhánh tính năng (`git checkout -b feature/AmazingFeature`).
-3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`).
-4. Push lên nhánh (`git push origin feature/AmazingFeature`).
-5. Mở một Pull Request.
+Chúng tôi luôn hoan nghênh các đóng góp từ cộng đồng.
 
 ## 📄 Giấy phép
 Phân phối dưới giấy phép MIT. Xem `LICENSE` để biết thêm thông tin.

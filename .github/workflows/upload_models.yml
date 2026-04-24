@@ -1,0 +1,28 @@
+name: Upload Models to Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  upload-models:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Models Zip
+        run: |
+          # Đây là nơi bạn có thể thêm lệnh tải model từ URL nếu muốn tự động hoàn toàn
+          # Ví dụ: wget https://example.com/models.zip
+          # Hiện tại workflow này chỉ là mẫu để bạn tùy chỉnh
+          echo "Bắt đầu đóng gói models..."
+          zip -r models_vn.zip models/ || echo "Thư mục models trống hoặc không tồn tại trong repo"
+
+      - name: Upload Asset to Release
+        uses: softprops/action-gh-release@v2
+        if: success()
+        with:
+          files: models_vn.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
