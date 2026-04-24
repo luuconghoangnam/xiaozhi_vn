@@ -1,0 +1,12 @@
+{
+    "SYSTEM_OPTIONS": {
+        "NETWORK": {
+            "WEBSOCKET_URL": "wss://api.xiaozhi.me/v1/robot/protocol",
+            "WEBSOCKET_ACCESS_TOKEN": "NHAP_TOKEN_CUA_BAN_TAI_DAY"
+        }
+    },
+    "DEVICE_ID": "XZ_VN_MAC_CUA_BAN",
+    "LLM_OPTIONS": {
+        "LANGUAGE": "vi-VN"
+    }
+}

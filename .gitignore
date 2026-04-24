@@ -1,32 +1,12 @@
-/logs
-/config
-
-.venv
-**/__pycache__/
-
+.venv/
 .idea/
-venv/
-
-# 音乐缓存
+.vscode/
+__pycache__/
+*.pyc
+logs/
+models/
 cache/
-
-
-/models
-
-# 打包相关
-/build
-/dist
-
-# MACOS
-.DS_Store
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-xiaozhi.spec
-
-/installer
+# Allow config example but ignore real config
+config/*
+!config/config.example.json
+crash_report.txt
