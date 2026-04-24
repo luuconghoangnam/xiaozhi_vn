@@ -1,39 +1,45 @@
 @echo off
-echo [BUOC 5] Cau hinh tai khoan...
+echo [BUOC 5] Cau hinh tai khoan va Ket noi thiet bi...
 
 if not exist "config" mkdir "config"
 
-if not exist "config\config.json" (
-    if exist "config\config.example.json" (
-        copy "config\config.example.json" "config\config.json" >nul
-    ) else (
-        echo [>] Dang khoi tao file cau hinh moi...
-        powershell -Command "$json = @{ SYSTEM_OPTIONS = @{ NETWORK = @{ WEBSOCKET_URL = 'wss://api.xiaozhi.me/v1/robot/protocol'; WEBSOCKET_ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN_HERE' } }; DEVICE_ID = 'COONIE_AI_VN'; LLM_OPTIONS = @{ LANGUAGE = 'vi-VN' } }; $json | ConvertTo-Json -Depth 20 | Set-Content 'config/config.json'"
-    )
-)
+REM Lay Machine ID thuc te de lam Device ID
+for /f "delims=" %%i in ('powershell -Command "Get-CimInstance Win32_ComputerSystemProduct | Select-Object -ExpandProperty UUID"') do set "MID=%%i"
+set "DEVICE_ID=XZ_VN_%MID:~0,8%"
 
-REM Kiem tra xem da co Token thuc su chua
-powershell -Command "$json=(Get-Content 'config/config.json' | ConvertFrom-Json); if ($json.SYSTEM_OPTIONS.NETWORK.WEBSOCKET_ACCESS_TOKEN -and $json.SYSTEM_OPTIONS.NETWORK.WEBSOCKET_ACCESS_TOKEN -ne 'YOUR_ACCESS_TOKEN_HERE') { exit 0 } else { exit 1 }"
-
-if %errorlevel% equ 0 (
-    echo [OK] Ban da cau hinh Token truoc do.
-    set /p RECONFIG="Ban co muon nhap lai Token khong? (y/n): "
-    if /i "%RECONFIG%" neq "y" exit /b 0
-)
-
+cls
+echo ============================================================
+echo           HUONG DAN KET NOI THIET BI XIAOZHI
+echo ============================================================
 echo.
-echo =======================================================
-echo  BAN CAN DIEN ACCESS TOKEN DE UNG DUNG HOAT DONG
-echo  Lay token tai: https://xiaozhi.me/
-echo =======================================================
-set /p TOKEN="Nhap Access Token cua ban: "
+echo  BUOC A: Script se mo trang Web Dashboard cho ban.
+echo  BUOC B: Nhan [Add Device] (Them thiet bi).
+echo  BUOC C: Nhap ma so sau day vao o [Device ID] tren Web:
+echo.
+powershell -Command "Write-Host '      >>> ' -NoNewline; Write-Host '%DEVICE_ID%' -ForegroundColor Yellow -BackgroundColor Black; Write-Host ''"
+echo.
+echo  BUOC D: Sau khi Save, hay Copy [Access Token] va dan vao day.
+echo.
+echo ============================================================
+echo [>] Dang mo trinh duyet...
+start https://xiaozhi.me/dashboard/devices
+echo.
+
+set /p TOKEN="NHAP ACCESS TOKEN CUA BAN TAI DAY: "
 
 if "%TOKEN%"=="" (
-    echo [!] Ban chua nhap token. Ban co the tu sua trong config/config.json sau.
-) else (
-    echo [>] Dang cap nhat config.json...
-    powershell -Command "$path='config/config.json'; $json=(Get-Content $path | ConvertFrom-Json); $json.SYSTEM_OPTIONS.NETWORK.WEBSOCKET_ACCESS_TOKEN='%TOKEN%'; $json | ConvertTo-Json -Depth 20 | Set-Content $path"
-    echo [OK] Da cau hinh xong Token.
+    echo [!] Ban chua nhap token. Quy trinh bi gian doan.
+    pause
+    exit /b 1
 )
 
+echo [>] Dang luu cau hinh he thong...
+powershell -Command "$path='config/config.json'; $json=(Get-Content $path | ConvertFrom-Json); $json.SYSTEM_OPTIONS.NETWORK.WEBSOCKET_ACCESS_TOKEN='%TOKEN%'; $json.DEVICE_ID='%DEVICE_ID%'; $json | ConvertTo-Json -Depth 20 | Set-Content $path"
+
+echo.
+echo ============================================================
+echo   [OK] LIEN KET THANH CONG! 
+echo   Thiet bi cua ban hien da san sang hoat dong.
+echo ============================================================
+timeout /t 3 >nul
 exit /b 0
