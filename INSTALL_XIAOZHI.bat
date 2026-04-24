@@ -1,6 +1,8 @@
 @echo off
-:: Chuyen vao thu muc chua file bat nay
+echo [DEBUG] Dang khoi chay...
+pause
 cd /d "%~dp0"
+echo [DEBUG] Thu muc hien tai: %cd%
 
 title CAI DAT XIAOZHI VN - TU DONG
 cls
@@ -11,27 +13,29 @@ echo.
 
 :: 1. Python
 if not exist "scripts\setup\01_python.bat" (
-    echo [!] Loi: Khong tim thay thu muc scripts\setup.
+    echo [!] Loi: Khong tim thay scripts\setup\01_python.bat
+    echo [DEBUG] Toan bo duong dan: "%~dp0scripts\setup\01_python.bat"
     pause
     exit /b 1
 )
 
+echo [>] Bat dau Buoc 1...
 call "scripts\setup\01_python.bat"
 if %errorlevel% neq 0 goto :failed
 
-:: 2. Venv
+echo [>] Bat dau Buoc 2...
 call "scripts\setup\02_venv.bat"
 if %errorlevel% neq 0 goto :failed
 
-:: 3. Libs
+echo [>] Bat dau Buoc 3...
 call "scripts\setup\03_libs.bat"
 if %errorlevel% neq 0 goto :failed
 
-:: 4. Models
+echo [>] Bat dau Buoc 4...
 call "scripts\setup\04_models.bat"
 if %errorlevel% neq 0 goto :failed
 
-:: 5. Config
+echo [>] Bat dau Buoc 5...
 call "scripts\setup\05_config.bat"
 if %errorlevel% neq 0 goto :failed
 
@@ -46,6 +50,5 @@ exit /b 0
 :failed
 echo.
 echo [X] CO LOI XAY RA TRONG QUA TRINH CAI DAT.
-echo Vui long kiem tra lai cac buoc tren hoac lien he ho tro.
 pause
 exit /b 1
