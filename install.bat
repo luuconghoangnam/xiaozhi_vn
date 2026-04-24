@@ -8,25 +8,28 @@ echo ==========================================
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo [!] Khong tim thay Python tren he thong.
-    echo [>] Dang thu tu dong cai dat Python 3.12 qua winget...
+    echo [>] Dang tai xuong Python 3.12 tu python.org...
     
-    :: Kiem tra winget
-    winget --version >nul 2>&1
-    if %errorlevel% neq 0 (
-        echo [!] Khong tim thay winget. Vui long cai dat Python thu cong tai: https://www.python.org/
+    set "PYTHON_URL=https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe"
+    set "PYTHON_EXE=%TEMP%\python_installer.exe"
+    
+    :: Dung PowerShell de tai xuong
+    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('!PYTHON_URL!', '!PYTHON_EXE!')"
+    
+    if not exist "!PYTHON_EXE!" (
+        echo [!] Khong the tai xuong Python. Vui long kiem tra ket noi mang.
         pause
         exit /b 1
     )
     
-    :: Cai dat Python
-    winget install Python.Python.3.12 --silent --accept-package-agreements --accept-source-agreements
-    if %errorlevel% neq 0 (
-        echo [!] Cai dat Python that bai. Vui long cai dat thu cong.
-        pause
-        exit /b 1
-    )
+    echo [>] Dang cai dat Python (vui long cho trong giay lat)...
+    :: Cai dat im lang, add vao PATH
+    start /wait "" "!PYTHON_EXE!" /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
     
-    echo [OK] Da cai dat xong Python. Vui long KHOI DONG LAI cua so CMD nay de tiep tuc.
+    del "!PYTHON_EXE!"
+    
+    echo [OK] Da cai dat xong Python. 
+    echo [!] LUU Y: Ban can DONG cua so nay va MO LAI de cap nhat bien moi truong.
     pause
     exit /b 0
 )
