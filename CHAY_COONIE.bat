@@ -1,33 +1,26 @@
 @echo off
-title XIAOZHI VN - COONIE AI
+setlocal
 cd /d "%~dp0"
+title COONIE AI - DEBUG
 
-echo ============================================================
-echo           DANG KHOI DONG COONIE AI (XIAOZHI VN)
-echo ============================================================
+echo ---------------------------------------------------
+echo  DANG KIEM TRA HE THONG...
+echo ---------------------------------------------------
 
-set PYTHONUTF8=1
-
+REM Kiem tra moi truong ao
 if not exist ".venv\Scripts\python.exe" (
-    echo [!] LOI: Khong tim thay moi truong ao (.venv).
-    echo [>] Hay chay file INSTALL_XIAOZHI.bat truoc.
+    echo [!] KHONG TIM THAY .VENV - HAY CHAY INSTALL_XIAOZHI.bat TRUOC!
     pause
-    exit /b 1
+    exit /b
 )
 
-REM Chạy file main.py và bắt lỗi
+echo [>] Dang khoi dong AI...
+echo [>] Neu bi crash, thong tin se hien duoi day:
+echo.
+
 .venv\Scripts\python.exe main.py
 
-if %errorlevel% neq 0 (
-    echo.
-    echo [!] UNG DUNG BI DUNG DOT NGOT (Error Code: %errorlevel%).
-    if exist "crash_report.txt" (
-        echo [>] THONG TIN LOI CHI TIET:
-        type crash_report.txt
-    )
-    pause
-)
-
 echo.
-echo [DEBUG] Nhan phim bat ky de thoat...
+echo ---------------------------------------------------
+echo  CHUONG TRINH DA DUNG.
 pause
