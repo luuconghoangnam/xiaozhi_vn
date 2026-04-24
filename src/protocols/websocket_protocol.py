@@ -73,9 +73,14 @@ class WebsocketProtocol(Protocol):
             # 在连接时创建 Event，确保在正确的事件循环中
             self.hello_received = asyncio.Event()
 
+            # Đảm bảo WEBSOCKET_URL không bị None và có giá trị mặc định
+            if not self.WEBSOCKET_URL:
+                self.WEBSOCKET_URL = "wss://api.xiaozhi.me/v1/robot/protocol"
+                logger.warning(f"WEBSOCKET_URL trống, sử dụng mặc định: {self.WEBSOCKET_URL}")
+
             # 判断是否应该使用 SSL
             current_ssl_context = None
-            if self.WEBSOCKET_URL.startswith("wss://"):
+            if self.WEBSOCKET_URL and self.WEBSOCKET_URL.startswith("wss://"):
                 current_ssl_context = ssl_context
 
             # 建立WebSocket连接 (兼容不同Python版本的写法)
@@ -239,7 +244,7 @@ class WebsocketProtocol(Protocol):
         处理连接丢失.
         """
         if self._handling_connection_loss:
-            logger.debug(f"连接丢失处理中，忽略重复事件: {reason}")
+            logger.debug(f"连接丢失处理 in, 忽略重复事件: {reason}")
             return
 
         self._handling_connection_loss = True
