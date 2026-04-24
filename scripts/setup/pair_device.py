@@ -2,18 +2,35 @@ import asyncio
 import websockets
 import json
 import uuid
-import sys
+import ssl
 
 async def get_pair_code():
+    # URL chinh thuc
     uri = "wss://api.xiaozhi.me/v1/robot/protocol"
-    # Tao Device ID duy nhat
+    
+    # Tao Device ID tu MAC cua ban
     mac_addr = hex(uuid.getnode()).replace('0x', '').upper()
     device_id = f"XZ_VN_{mac_addr[:8]}"
     
-    print(f"\n[>] Dang ket noi den server Xiaozhi...")
+    print(f"\n[>] Device ID: {device_id}")
+    print(f"[>] Dang ket noi den Server (Security Mode)...")
+    
+    # Bo qua kiem tra SSL neu may ban bi loi chung chi
+    ssl_context = ssl._create_unverified_context()
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (ESP32)",
+        "X-Device-Id": device_id,
+        "X-Protocol-Version": "3"
+    }
+    
     try:
-        async with websockets.connect(uri) as websocket:
-            # Gui thong tin hello de xin ma bind
+        async with websockets.connect(
+            uri, 
+            extra_headers=headers,
+            ssl=ssl_context,
+            subprotocols=["binary", "base64"] # Xiaozhi yeu cau subprotocol
+        ) as websocket:
             hello = {
                 "type": "hello",
                 "version": 3,
@@ -23,26 +40,23 @@ async def get_pair_code():
             }
             await websocket.send(json.dumps(hello))
             
-            # Cho phan hoi tu server
-            response = await websocket.recv()
+            # Nhan phan hoi
+            response = await asyncio.wait_for(websocket.recv(), timeout=10.0)
             data = json.loads(response)
             
-            if data.get("type") == "hello" and "bind_code" in data:
-                bind_code = data["bind_code"]
-                print("\n" + "="*50)
-                print(f"       MA LIEN KET CUA BAN LA: {bind_code}")
-                print("="*50)
-                print("\n1. Hay nhap ma 6 so nay vao Web Xiaozhi.")
-                print("2. Sau khi nhap xong, nhan phim bat ky o day de tiep tuc.")
+            if "bind_code" in data:
+                print("\n" + "!"*50)
+                print(f"   MA XAC THUC 6 SO CUA BAN: {data['bind_code']}")
+                print("!"*50)
+                print("\n[>] Hay nhap ma nay len Web ngay bay gio.")
                 return True
-            else:
-                # Neu server yeu cau token nghia la da bind roi
-                print(f"\n[!] Thiet bi nay da duoc lien ket truoc do (Device ID: {device_id})")
-                return False
                 
     except Exception as e:
-        print(f"\n[!] Loi ket noi: {e}")
-        return False
+        print(f"\n[!] Khong the lay ma tu dong: {e}")
+        print("\n[MEOTRUOC]: Ban hay thu MO UNG DUNG CHINH (CHAY_COONIE.bat).")
+        print("Khi ung dung chay lan dau, no cung se tu dong hien ma 6 so.")
+        
+    return False
 
 if __name__ == "__main__":
     asyncio.run(get_pair_code())
