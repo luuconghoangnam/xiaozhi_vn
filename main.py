@@ -1,8 +1,6 @@
 import sys
 import asyncio
 from pathlib import Path
-from PyQt5.QtWidgets import QApplication
-import qasync
 
 # Them thu muc src vao he thong
 project_root = Path(__file__).resolve().parent
@@ -17,25 +15,16 @@ logger = get_logger(__name__)
 async def start_app():
     try:
         app_instance = Application.get_instance()
-        # Chay app voi che do GUI
-        exit_code = await app_instance.run(protocol="websocket", mode="gui")
+        # THU NGHIEM: Chay o che do 'console' de tranh loi GUI
+        exit_code = await app_instance.run(protocol="websocket", mode="console")
         return exit_code
     except Exception as e:
-        logger.error(f"Loi trong qua trinh chay: {e}", exc_info=True)
+        logger.error(f"Loi: {e}", exc_info=True)
         return 1
 
 def main():
-    # 1. Khoi tao QApplication (bat buoc cho PyQt5)
-    qt_app = QApplication(sys.argv)
-    
-    # 2. Su dung qasync de ket hop asyncio va Qt
-    loop = qasync.QEventLoop(qt_app)
-    asyncio.set_event_loop(loop)
-    
     try:
-        # 3. Chay loop cho den khi app ket thuc
-        with loop:
-            sys.exit(loop.run_until_complete(start_app()))
+        asyncio.run(start_app())
     except KeyboardInterrupt:
         pass
     except Exception as e:
