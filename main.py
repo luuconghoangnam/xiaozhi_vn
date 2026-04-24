@@ -1,7 +1,8 @@
-import asyncio
 import sys
-import os
+import asyncio
 from pathlib import Path
+from PyQt5.QtWidgets import QApplication
+import qasync
 
 # Them thu muc src vao he thong
 project_root = Path(__file__).resolve().parent
@@ -13,24 +14,33 @@ from src.utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-async def main():
+async def start_app():
     try:
-        # Khoi tao ung dung
-        app = Application.get_instance()
-        
-        # Chay ung dung (mac dinh dung websocket va giao dien gui)
-        # Ban co the doi mode="console" neu muon chay trong bang den
-        exit_code = await app.run(protocol="websocket", mode="gui")
-        sys.exit(exit_code)
-        
-    except KeyboardInterrupt:
-        logger.info("Dang dung ung dung...")
+        app_instance = Application.get_instance()
+        # Chay app voi che do GUI
+        exit_code = await app_instance.run(protocol="websocket", mode="gui")
+        return exit_code
     except Exception as e:
-        logger.error(f"Loi khoi dong: {e}", exc_info=True)
+        logger.error(f"Loi trong qua trinh chay: {e}", exc_info=True)
+        return 1
+
+def main():
+    # 1. Khoi tao QApplication (bat buoc cho PyQt5)
+    qt_app = QApplication(sys.argv)
+    
+    # 2. Su dung qasync de ket hop asyncio va Qt
+    loop = qasync.QEventLoop(qt_app)
+    asyncio.set_event_loop(loop)
+    
+    try:
+        # 3. Chay loop cho den khi app ket thuc
+        with loop:
+            sys.exit(loop.run_until_complete(start_app()))
+    except KeyboardInterrupt:
+        pass
+    except Exception as e:
+        print(f"Loi nghiem trong: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        pass
+    main()
