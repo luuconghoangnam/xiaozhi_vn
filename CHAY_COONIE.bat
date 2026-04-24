@@ -15,12 +15,16 @@ if not exist ".venv\Scripts\python.exe" (
     exit /b 1
 )
 
-REM Chạy file main.py mới tạo
+REM Chạy file main.py và bắt lỗi
 .venv\Scripts\python.exe main.py
 
 if %errorlevel% neq 0 (
     echo.
     echo [!] UNG DUNG BI DUNG DOT NGOT (Error Code: %errorlevel%).
+    if exist "crash_report.txt" (
+        echo [>] THONG TIN LOI CHI TIET:
+        type crash_report.txt
+    )
     pause
 )
 
