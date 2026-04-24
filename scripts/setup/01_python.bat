@@ -1,40 +1,40 @@
 @echo off
-echo [DEBUG CON 1] Da vao file 01_python.bat thành công.
-pause
+echo [BUOC 1] Kiem tra moi truong Python...
 
-echo [>] Dang kiem tra lenh 'python' (Vui lòng chờ 2-3 giây)...
-python --version >nul 2>&1
+REM Su dung PowerShell de kiem tra mot cach chinh xac va an toan
+powershell -Command "if (Get-Command python -ErrorAction SilentlyContinue) { exit 0 } else { if (Get-Command py -ErrorAction SilentlyContinue) { exit 0 } else { exit 1 } }"
+
 if %errorlevel% equ 0 (
-    echo [OK] May ban da co san Python.
+    echo [OK] May ban da co san Python. Bo qua buoc cai dat.
+    timeout /t 2 >nul
     exit /b 0
 )
-echo [!] Lenh 'python' khong hoat dong.
-pause
 
-echo [>] Dang kiem tra lenh 'py' (Python Launcher)...
-py --version >nul 2>&1
-if %errorlevel% equ 0 (
-    echo [OK] May ban co san Python Launcher (py).
-    exit /b 0
-)
-echo [!] Lenh 'py' cung khong hoat dong.
-pause
-
-echo [DEBUG CON 2] Bat dau tai Python tu python.org...
+echo [!] Khong tim thay Python. Bat dau quy trinh tai va cai dat...
+echo.
+echo [>] Dang tai Python 3.12 tu python.org (Vui long cho)...
 powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe' -OutFile '$env:TEMP\python_installer.exe'"
 
 if not exist "%TEMP%\python_installer.exe" (
-    echo [!] LOI: Khong the tai file cai dat.
+    echo [!] LOI: Khong the tai file. Kiem tra ket noi mang.
     pause
     exit /b 1
 )
 
-echo [DEBUG CON 3] Da tai xong. Dang mo trinh cai dat...
-echo [!] LUU Y: Khi bang cai dat hien len, hay tich vao o 'Add Python to PATH' roi moi nhan Install.
+echo [OK] Da tai xong bộ cài.
+echo.
+echo ======================================================
+echo  HUONG DAN:
+echo  1. Bang cai dat Python se hien len.
+echo  2. Tich vao o [Add Python to PATH] o phia duoi.
+echo  3. Nhan [Install Now].
+echo ======================================================
+echo.
 pause
 
-start /wait "" "%TEMP%\python_installer.exe" /quiet InstallAllUsers=1 PrependPath=1
+start /wait "" "%TEMP%\python_installer.exe"
 del "%TEMP%\python_installer.exe"
 
-echo [OK] Da cai dat xong Python.
+echo.
+echo [OK] Da hoan tat Buoc 1.
 exit /b 0
