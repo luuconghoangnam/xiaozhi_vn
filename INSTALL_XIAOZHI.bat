@@ -1,4 +1,7 @@
 @echo off
+:: Chuyen vao thu muc chua file bat nay
+cd /d "%~dp0"
+
 title CAI DAT XIAOZHI VN - TU DONG
 cls
 echo ============================================================
@@ -7,23 +10,29 @@ echo ============================================================
 echo.
 
 :: 1. Python
-call scripts\setup\01_python.bat
+if not exist "scripts\setup\01_python.bat" (
+    echo [!] Loi: Khong tim thay thu muc scripts\setup.
+    pause
+    exit /b 1
+)
+
+call "scripts\setup\01_python.bat"
 if %errorlevel% neq 0 goto :failed
 
 :: 2. Venv
-call scripts\setup\02_venv.bat
+call "scripts\setup\02_venv.bat"
 if %errorlevel% neq 0 goto :failed
 
 :: 3. Libs
-call scripts\setup\03_libs.bat
+call "scripts\setup\03_libs.bat"
 if %errorlevel% neq 0 goto :failed
 
 :: 4. Models
-call scripts\setup\04_models.bat
+call "scripts\setup\04_models.bat"
 if %errorlevel% neq 0 goto :failed
 
 :: 5. Config
-call scripts\setup\05_config.bat
+call "scripts\setup\05_config.bat"
 if %errorlevel% neq 0 goto :failed
 
 echo.
