@@ -16,6 +16,7 @@ sounddevice>=0.4.6
 opuslib>=3.0.1
 soundfile>=0.12.1
 scipy>=1.10.0
+soxr>=0.3.6
 mutagen>=1.46.0
 numpy>=1.24.0
 pydantic>=2.0.0
@@ -40,3 +41,6 @@ psutil>=5.9.0
 pynput>=1.7.6
 pypinyin>=0.49.0
 lunar-python>=1.0.0
+pendulum>=2.1.2
+pyperclip>=1.8.2
+pywin32>=306; sys_platform == 'win32'
