@@ -10,10 +10,9 @@ if %errorlevel% equ 0 (
     exit /b 0
 )
 
-echo [!] Khong tim thay Python. Dang tai ve...
+echo [!] Khong tim thay Python. Bat dau quy trinh tai va cai dat...
 echo [>] Dang tai Python 3.12 (Vui long cho)...
 
-REM Tai truc tiep vao thu muc hien tai de tranh loi duong dan TEMP
 powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe' -OutFile 'python_installer.exe'"
 
 if not exist "python_installer.exe" (
@@ -37,5 +36,11 @@ start /wait "" "python_installer.exe"
 del "python_installer.exe"
 
 echo.
-echo [OK] Da hoan tat Buoc 1.
-exit /b 0
+echo ============================================================
+echo  QUAN TRONG: BAN VUA CAI DAT XONG PYTHON.
+echo  De Windows nhan dien duoc lenh 'python', ban can:
+echo  1. DONG cua so nay lai (nhan X).
+echo  2. MO LAI file INSTALL_XIAOZHI.bat de tiep tuc.
+echo ============================================================
+pause
+exit /b 1
