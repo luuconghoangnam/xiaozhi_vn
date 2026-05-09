@@ -35,7 +35,7 @@
 ## 🚀 Cài đặt
 
 ### Cách 1: Sử dụng Script tự động (Khuyên dùng - Tự động 100%)
-1. Tải dự án về máy:
+1. Tải dự án về máy: (scripts 1 chạm nhưng đang lỗi tôi lười fix quá tự clone về cho codex refactor cài đặt cho nhé quá mệt mõi)
    ```bash
    git clone https://github.com/luuconghoangnam/xiaozhi_vn.git
    cd xiaozhi_vn/py-xiaozhi
